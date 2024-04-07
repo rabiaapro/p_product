@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choix de la version</title>
+</head>
+<body>
+    <h1>Choix de la version</h1>
+    <button onclick="retrieveVersion('v1')">Version 1</button>
+    <button onclick="retrieveVersion('v2')">Version 2</button>
+    <button onclick="retrieveVersion('v3')">Version 3</button>
+    <!-- Ajoutez d'autres boutons pour d'autres versions si nécessaire -->
+
+    <div id="content"></div>
+
+    <script>
+        function retrieveVersion(version) {
+            var apiUrl = "http://votreserveur:port/votreprojet/github/retrieve";
+            apiUrl += "?owner=nom_du_proprietaire";
+            apiUrl += "&repo=nom_du_repo";
+            apiUrl += "&file=chemin_du_fichier_" + version;
+            apiUrl += "&branch=branche";
+
+            fetch(apiUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erreur lors de la récupération de la version: ' + response.statusText);
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    document.getElementById("content").innerText = data;
+                })
+                .catch(error => {
+                    console.error(error);
+                    document.getElementById("content").innerText = "Erreur: " + error.message;
+                });
+        }
+    </script>
+</body>
+</html>
